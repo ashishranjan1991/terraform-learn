@@ -308,3 +308,6 @@ resource "aws_security_group" "db-sb" {
   }
 }
 
+resource "aws_instance" "bastion" {
+  
+}
