@@ -9,3 +9,8 @@ variable "instance_type" {
   type = string
   default = ""
 }
+variable "instance_class" {
+  description = "this is rds instance"
+  type = string
+  default = ""
+}

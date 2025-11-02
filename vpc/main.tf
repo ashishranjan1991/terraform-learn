@@ -49,7 +49,7 @@ resource "aws_subnet" "app-layer-1" {
       Name = "app-layer-1"
     }
 }
-resource "aws_subnet" "web-layer-2" {
+resource "aws_subnet" "app-layer-2" {
     vpc_id = aws_vpc.name.id
     cidr_block = "10.0.6.0/24"
     availability_zone = "us-east-1b"
@@ -111,14 +111,14 @@ resource "aws_route_table_association" "public_subnet-2" {
 resource "aws_eip" "nat_ip" {
   domain = "vpc"
   tags = {
-    Name = "nat_ip"
+    Name = "nat-vpc"
   }
 }
 
 #Nat Creation
 resource "aws_nat_gateway" "nat" {
     allocation_id = aws_eip.nat_ip.id
-    subnet_id = aws_route_table_association.public_subnet-1.id
+    subnet_id = aws_subnet.subnet-1.id
     tags = {
       Name = "nat"
     }
@@ -312,7 +312,7 @@ resource "aws_instance" "bastion" {
   ami = var.ami_id
   instance_type = var.instance_type
   subnet_id = aws_subnet.subnet-1.id
-  security_groups = [ aws_security_group.bation.id ]
+  vpc_security_group_ids = [ aws_security_group.bation.id ]
   tags = {
     Name = "bastion Host"
   }
@@ -321,8 +321,8 @@ resource "aws_instance" "bastion" {
 resource "aws_instance" "web-server" {
     ami = var.ami_id
     instance_type = var.instance_type
-    subnet_id = aws_subnet.web-layer-1
-    security_groups = [ aws_security_group.web-sg.id ]
+    subnet_id = aws_subnet.web-layer-1.id
+    vpc_security_group_ids = [ aws_security_group.web-sg.id ]
     tags = {
       Name = "web-server"
     }
@@ -331,8 +331,11 @@ resource "aws_instance" "web-server" {
 resource "aws_instance" "app-server" {
   ami = var.ami_id
   instance_type = var.instance_type
-  subnet_id = aws_subnet.app-layer-1
-  security_groups = [ aws_security_group.backend-sg.id ]
+  subnet_id = aws_subnet.app-layer-1.id
+  vpc_security_group_ids = [ aws_security_group.backend-sg.id ]
+  tags = {
+    Name = "app-server"
+  }
 
 }
 
@@ -342,12 +345,12 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
     description = "this is subnet group for DB"
 }
 
-resource "aws_db_instance" "mydb" {
+resource "aws_db_instance" "mydb1" {
     identifier = "my-rds-db"
     engine = "mysql"
-    db_name = "database"
-    engine_version = "8.0"
-    instance_class = "db.t3.micro"
+    engine_version = "8.0.40"
+    db_name = "database1"
+    instance_class = var.instance_class
     allocated_storage = 20
     username = "admin"
     password = "12345678"
