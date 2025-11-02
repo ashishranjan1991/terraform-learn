@@ -309,5 +309,54 @@ resource "aws_security_group" "db-sb" {
 }
 
 resource "aws_instance" "bastion" {
-  
+  ami = var.ami_id
+  instance_type = var.instance_type
+  subnet_id = aws_subnet.subnet-1.id
+  security_groups = [ aws_security_group.bation.id ]
+  tags = {
+    Name = "bastion Host"
+  }
 }
+
+resource "aws_instance" "web-server" {
+    ami = var.ami_id
+    instance_type = var.instance_type
+    subnet_id = aws_subnet.web-layer-1
+    security_groups = [ aws_security_group.web-sg.id ]
+    tags = {
+      Name = "web-server"
+    }
+}
+
+resource "aws_instance" "app-server" {
+  ami = var.ami_id
+  instance_type = var.instance_type
+  subnet_id = aws_subnet.app-layer-1
+  security_groups = [ aws_security_group.backend-sg.id ]
+
+}
+
+resource "aws_db_subnet_group" "rds_subnet_group" {
+    name = "db-subnet-group"
+    subnet_ids = [ aws_subnet.db-layer-1.id,aws_subnet.db-layer-2.id ]
+    description = "this is subnet group for DB"
+}
+
+resource "aws_db_instance" "mydb" {
+    identifier = "my-rds-db"
+    engine = "mysql"
+    db_name = "database"
+    engine_version = "8.0"
+    instance_class = "db.t3.micro"
+    allocated_storage = 20
+    username = "admin"
+    password = "12345678"
+    parameter_group_name = "default.mysql8.0"
+    skip_final_snapshot = true
+    publicly_accessible = false
+    db_subnet_group_name = aws_db_subnet_group.rds_subnet_group.name
+    vpc_security_group_ids = [ aws_security_group.db-sb.id ]
+
+    depends_on = [ aws_db_subnet_group.rds_subnet_group ]
+}
+
