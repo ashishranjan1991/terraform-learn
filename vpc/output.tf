@@ -1,7 +1,7 @@
 output "rds_endpoint" {
     value = aws_db_instance.mydb1.endpoint
 }
-output "bastion_ssh" {
+output "bastion_dns" {
     value = aws_instance.bastion.public_dns
   
 }
