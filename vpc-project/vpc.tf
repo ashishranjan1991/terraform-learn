@@ -74,6 +74,7 @@ resource "aws_subnet" "app-2" {
 resource "aws_subnet" "db-1" {
     cidr_block = "10.0.7.0/24"
     vpc_id = aws_vpc.tier_appliction.id
+    availability_zone = "us-east-1a"
     tags = {
       Name = "db_subnet-1"
     }
@@ -82,6 +83,7 @@ resource "aws_subnet" "db-1" {
 resource "aws_subnet" "db-2" {
     cidr_block = "10.0.8.0/24"
     vpc_id = aws_vpc.tier_appliction.id
+    availability_zone = "us-east-1b"
     tags = {
       Name = "db_subnet-2"
     }
@@ -113,7 +115,7 @@ resource "aws_eip" "nat_ip" {
 # NAT Gateway
 resource "aws_nat_gateway" "nat" {
     allocation_id = aws_eip.nat_ip.id
-    subnet_id = aws_subnet.subnet-1.id
+    subnet_id = aws_subnet.public-1.id
     tags = {
       Name = "nat"
     }
@@ -121,18 +123,18 @@ resource "aws_nat_gateway" "nat" {
 }
 #Public Route
 resource "aws_route" "ig-route" {
-    route_table_id = aws_route_table.public_rt.id
+    route_table_id = aws_route_table.rt-public.id
     destination_cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.IG.id
 }
 
 #Public Subnet Assosiation
 resource "aws_route_table_association" "public_subnet-1" {
-  subnet_id = aws_subnet.subnet-1.id
+  subnet_id = aws_subnet.public-1.id
   route_table_id = aws_route_table.rt-public.id
 }
 resource "aws_route_table_association" "public_subnet-2" {
-  subnet_id = aws_subnet.subnet-2.id
+  subnet_id = aws_subnet.public-2.id
   route_table_id = aws_route_table.rt-public.id
 }
 

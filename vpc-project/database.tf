@@ -10,12 +10,12 @@ resource "aws_db_subnet_group" "db-subnet-group" {
 }
 
 # Create the RDS MySQL instance
-resource "aws_db_instance" "mydb" {
+resource "aws_db_instance" "my_db" {
   identifier              = "mydb-instance"
   allocated_storage       = var.db_allocated_storage
   engine                  = "mysql"
   engine_version          = "8.0"
-  instance_class          = var.ec_instance_type
+  instance_class          = var.instance_class
   db_name                 = var.db_name
   username                = var.db_username
   password                = var.db_password
@@ -33,13 +33,13 @@ resource "aws_db_instance" "mydb" {
 # Create a read replica of the RDS instance
 resource "aws_db_instance" "db-read-replica" {
   identifier              = "mydb-read-replica"
-  replicate_source_db     = aws_db_instance.mydb.id
+  replicate_source_db     = aws_db_instance.my_db.arn
   instance_class          = var.instance_class
   db_subnet_group_name    = aws_db_subnet_group.db-subnet-group.name
   vpc_security_group_ids  = [aws_security_group.db-sg.id]
   skip_final_snapshot     = true
   publicly_accessible     = false
-  depends_on              = [aws_db_instance.mydb]
+  depends_on              = [aws_db_instance.my_db]
   
   tags = {
     Name = "mydb-read-replica"

@@ -11,7 +11,7 @@ variable "ec_ami_id" {
 variable "instance_class" {
   description = "Instance class for RDS"
   type        = string
-  default     = "db.t2.micro"
+  default     = "db.t3.micro"
   
 }
 variable "db_name" {
@@ -33,4 +33,11 @@ variable "db_allocated_storage" {
   description = "Allocated storage for the RDS database in GB"
   type        = number
   default     = 20
+}
+
+
+variable "zone_name" {
+  description = "Hosted zone name for Route 53"
+  type        = string
+  default     = "example.com"
 }
