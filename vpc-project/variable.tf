@@ -6,7 +6,7 @@ variable "ec_instance_type" {
 variable "ec_ami_id" {
   description = "AMI ID for the EC2 instance"
   type        = string
-  default     = "ami-0c55b159cbfafe1f0" 
+  default     = "ami-0bdd88bd06d16ba03" 
 }
 variable "instance_class" {
   description = "Instance class for RDS"

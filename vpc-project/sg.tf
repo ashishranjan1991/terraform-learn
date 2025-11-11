@@ -134,7 +134,7 @@ resource "aws_security_group" "db-sg" {
         from_port = 3306
         to_port = 3306
         protocol = "tcp"
-        security_groups = [aws_security_group.app-sg.id]
+        security_groups = [aws_security_group.app-sg.id, aws_security_group.bastion-sg.id]
     }
     egress {
         from_port = 0
