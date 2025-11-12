@@ -7,10 +7,10 @@ resource "aws_key_pair" "keypair" {
 resource "aws_instance" "bation" {
     ami           = var.ec_ami_id # Example AMI ID, replace with a valid one for your region
     instance_type = var.ec_instance_type
-    subnet_id = aws_subnet.public-1.id
+    subnet_id = aws_subnet.public_1.id
     associate_public_ip_address = true
     key_name      = aws_key_pair.keypair.key_name
-    vpc_security_group_ids = [ aws_security_group.bastion-sg.id ]
+    vpc_security_group_ids = [ aws_security_group.bastion_sg.id ]
     tags = {
         Name = "BationInstance"
     }

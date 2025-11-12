@@ -3,13 +3,10 @@
 
 #     filter {
 #         name   = "name"
-#         values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+#         values = ["frontend-image"]
 #     }
 
-#     filter {
-#         name   = "virtualization-type"
-#         values = ["hvm"]
-#     }
+
 
 #     owners = ["137112412989"] # Amazon
   

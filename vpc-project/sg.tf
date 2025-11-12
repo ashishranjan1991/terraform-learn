@@ -1,5 +1,5 @@
 #Bastion Security Group
-resource "aws_security_group" "bastion-sg" {
+resource "aws_security_group" "bastion_sg" {
   vpc_id = aws_vpc.tier_appliction.id
   name = "bastion-sg"
     description = "allow ssh"
@@ -20,7 +20,7 @@ resource "aws_security_group" "bastion-sg" {
     }
 }
 #frontend ALB Security Group
-resource "aws_security_group" "frontend-alb" {
+resource "aws_security_group" "frontend_alb" {
   vpc_id = aws_vpc.tier_appliction.id
   name = "frontend-alb"
     description = "allow"
@@ -46,7 +46,7 @@ resource "aws_security_group" "frontend-alb" {
     }
 }
 #web Security Group
-resource "aws_security_group" "web-sg" {
+resource "aws_security_group" "web_sg" {
   vpc_id = aws_vpc.tier_appliction.id
   name = "web-sg"
     description = "allow"
@@ -55,14 +55,14 @@ resource "aws_security_group" "web-sg" {
         from_port = 22
         to_port = 22
         protocol = "tcp"
-        security_groups = [aws_security_group.bastion-sg.id]
+        security_groups = [aws_security_group.bastion_sg.id]
     }
     ingress {
         description = "http"
         from_port = 80
         to_port = 80
         protocol = "tcp"
-        security_groups = [aws_security_group.frontend-alb.id]
+        security_groups = [aws_security_group.frontend_alb.id]
     }
     egress {
         from_port = 0
@@ -75,7 +75,7 @@ resource "aws_security_group" "web-sg" {
 }
 
 #backend alb Security Group
-resource "aws_security_group" "backend-alb" {
+resource "aws_security_group" "backend_alb" {
   vpc_id = aws_vpc.tier_appliction.id
   name = "backend-alb"
     description = "allow"
@@ -84,7 +84,7 @@ resource "aws_security_group" "backend-alb" {
         from_port = 80
         to_port = 80
         protocol = "tcp"
-        security_groups = [aws_security_group.web-sg.id]
+        security_groups = [aws_security_group.web_sg.id]
     }
     egress {
         from_port = 0
@@ -96,7 +96,7 @@ resource "aws_security_group" "backend-alb" {
     }
 }
 #app Security Group
-resource "aws_security_group" "app-sg" {
+resource "aws_security_group" "app_sg" {
   vpc_id = aws_vpc.tier_appliction.id
   name = "app-sg"
     description = "allow"
@@ -105,14 +105,14 @@ resource "aws_security_group" "app-sg" {
         from_port = 80
         to_port = 80
         protocol = "tcp"
-        security_groups = [aws_security_group.backend-alb.id]
+        security_groups = [aws_security_group.backend_alb.id]
     }
     ingress {
         description = "sss"
         from_port = 22
         to_port = 22
         protocol = "tcp"
-        security_groups = [aws_security_group.bastion-sg.id]
+        security_groups = [aws_security_group.bastion_sg.id]
     }
     egress {
         from_port = 0
@@ -125,7 +125,7 @@ resource "aws_security_group" "app-sg" {
 }
 
 #db Security Group
-resource "aws_security_group" "db-sg" {
+resource "aws_security_group" "db_sg" {
   vpc_id = aws_vpc.tier_appliction.id
   name = "db-sg"
     description = "allow"
@@ -134,7 +134,7 @@ resource "aws_security_group" "db-sg" {
         from_port = 3306
         to_port = 3306
         protocol = "tcp"
-        security_groups = [aws_security_group.app-sg.id, aws_security_group.bastion-sg.id]
+        security_groups = [aws_security_group.app_sg.id, aws_security_group.bastion_sg.id]
     }
     egress {
         from_port = 0

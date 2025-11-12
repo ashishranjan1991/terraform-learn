@@ -15,7 +15,7 @@ resource "aws_internet_gateway" "IG" {
   
 }
 #public Subnets
-resource "aws_subnet" "public-1" {
+resource "aws_subnet" "public_1" {
     vpc_id = aws_vpc.tier_appliction.id
     cidr_block = "10.0.1.0/24"
     availability_zone = "us-east-1a"
@@ -25,7 +25,7 @@ resource "aws_subnet" "public-1" {
   
 }
 
-resource "aws_subnet" "public-2" {
+resource "aws_subnet" "public_2" {
     vpc_id = aws_vpc.tier_appliction.id
     cidr_block = "10.0.2.0/24"
     availability_zone = "us-east-1b"
@@ -35,7 +35,7 @@ resource "aws_subnet" "public-2" {
 }
 
 #web Subnets
-resource "aws_subnet" "web-1" {
+resource "aws_subnet" "web_1" {
     vpc_id = aws_vpc.tier_appliction.id
     cidr_block = "10.0.3.0/24"
     availability_zone = "us-east-1a"
@@ -43,7 +43,7 @@ resource "aws_subnet" "web-1" {
       Name = "web_subnet-1"
     }
 }
-resource "aws_subnet" "web-2" {
+resource "aws_subnet" "web_2" {
     vpc_id = aws_vpc.tier_appliction.id
     cidr_block = "10.0.4.0/24"
     availability_zone = "us-east-1b"
@@ -53,7 +53,7 @@ resource "aws_subnet" "web-2" {
 }
 
 #app Subnets
-resource "aws_subnet" "app-1" {
+resource "aws_subnet" "app_1" {
   vpc_id = aws_vpc.tier_appliction.id
   availability_zone = "us-east-1a"
   cidr_block = "10.0.5.0/24"
@@ -61,7 +61,7 @@ resource "aws_subnet" "app-1" {
         Name = "app_subnet-1"
     }
 }
-resource "aws_subnet" "app-2" {
+resource "aws_subnet" "app_2" {
   vpc_id = aws_vpc.tier_appliction.id
   cidr_block = "10.0.6.0/24"
     availability_zone = "us-east-1b"
@@ -71,7 +71,7 @@ resource "aws_subnet" "app-2" {
 }
 
 #db Subnets
-resource "aws_subnet" "db-1" {
+resource "aws_subnet" "db_1" {
     cidr_block = "10.0.7.0/24"
     vpc_id = aws_vpc.tier_appliction.id
     availability_zone = "us-east-1a"
@@ -80,7 +80,7 @@ resource "aws_subnet" "db-1" {
     }
 }
 
-resource "aws_subnet" "db-2" {
+resource "aws_subnet" "db_2" {
     cidr_block = "10.0.8.0/24"
     vpc_id = aws_vpc.tier_appliction.id
     availability_zone = "us-east-1b"
@@ -90,7 +90,7 @@ resource "aws_subnet" "db-2" {
 }
 
 #Public RT
-resource "aws_route_table" "rt-public" {
+resource "aws_route_table" "rt_public" {
     vpc_id = aws_vpc.tier_appliction.id
     tags = {
       Name = "rt-public"
@@ -98,7 +98,7 @@ resource "aws_route_table" "rt-public" {
 }
 
 #private RT
-resource "aws_route_table" "rt-private" {
+resource "aws_route_table" "rt_private" {
     vpc_id = aws_vpc.tier_appliction.id
     tags = {
       Name = "rt-private"
@@ -115,57 +115,57 @@ resource "aws_eip" "nat_ip" {
 # NAT Gateway
 resource "aws_nat_gateway" "nat" {
     allocation_id = aws_eip.nat_ip.id
-    subnet_id = aws_subnet.public-1.id
+    subnet_id = aws_subnet.public_1.id
     tags = {
       Name = "nat"
     }
     depends_on = [ aws_internet_gateway.IG ]
 }
 #Public Route
-resource "aws_route" "ig-route" {
-    route_table_id = aws_route_table.rt-public.id
+resource "aws_route" "ig_route" {
+    route_table_id = aws_route_table.rt_public.id
     destination_cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.IG.id
 }
 
 #Public Subnet Assosiation
-resource "aws_route_table_association" "public_subnet-1" {
-  subnet_id = aws_subnet.public-1.id
-  route_table_id = aws_route_table.rt-public.id
+resource "aws_route_table_association" "public_subnet_1" {
+  subnet_id = aws_subnet.public_1.id
+  route_table_id = aws_route_table.rt_public.id
 }
-resource "aws_route_table_association" "public_subnet-2" {
-  subnet_id = aws_subnet.public-2.id
-  route_table_id = aws_route_table.rt-public.id
+resource "aws_route_table_association" "public_subnet_2" {
+  subnet_id = aws_subnet.public_2.id
+  route_table_id = aws_route_table.rt_public.id
 }
 
 #Private Subnet Assosiation
-resource "aws_route_table_association" "private_subnet-1" {
-  subnet_id = aws_subnet.web-1.id
-  route_table_id = aws_route_table.rt-private.id
+resource "aws_route_table_association" "private_subnet_1" {
+  subnet_id = aws_subnet.web_1.id
+  route_table_id = aws_route_table.rt_private.id
 }
-resource "aws_route_table_association" "private_subnet-2" {
-  subnet_id = aws_subnet.web-2.id
-  route_table_id = aws_route_table.rt-private.id
+resource "aws_route_table_association" "private_subnet_2" {
+  subnet_id = aws_subnet.web_2.id
+  route_table_id = aws_route_table.rt_private.id
 }
-resource "aws_route_table_association" "private_subnet-3" {
-  subnet_id = aws_subnet.app-1.id
-  route_table_id = aws_route_table.rt-private.id
+resource "aws_route_table_association" "private_subnet_3" {
+  subnet_id = aws_subnet.app_1.id
+  route_table_id = aws_route_table.rt_private.id
 }
-resource "aws_route_table_association" "private_subnet-4" {
-  subnet_id = aws_subnet.app-2.id
-  route_table_id = aws_route_table.rt-private.id
+resource "aws_route_table_association" "private_subnet_4" {
+  subnet_id = aws_subnet.app_2.id
+  route_table_id = aws_route_table.rt_private.id
 }
-resource "aws_route_table_association" "private_subnet-5" {
-  subnet_id = aws_subnet.db-1.id
-  route_table_id = aws_route_table.rt-private.id
+resource "aws_route_table_association" "private_subnet_5" {
+  subnet_id = aws_subnet.db_1.id
+  route_table_id = aws_route_table.rt_private.id
 }
-resource "aws_route_table_association" "private_subnet-6" {
-  subnet_id = aws_subnet.db-2.id
-  route_table_id = aws_route_table.rt-private.id
+resource "aws_route_table_association" "private_subnet_6" {
+  subnet_id = aws_subnet.db_2.id
+  route_table_id = aws_route_table.rt_private.id
 }
 # Private Route
-resource "aws_route" "pvrt-route" {
-    route_table_id = aws_route_table.rt-private.id
+resource "aws_route" "pvrt_route" {
+    route_table_id = aws_route_table.rt_private.id
     destination_cidr_block = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat.id
 }

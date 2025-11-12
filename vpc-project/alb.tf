@@ -5,7 +5,7 @@ resource "aws_lb" "frontend_alb" {
     load_balancer_type = "application"
 
     # corrected security group resource name (use underscore)
-    security_groups    = [aws_security_group.frontend-alb.id]
+    security_groups    = [aws_security_group.frontend_alb.id]
 
     # corrected subnet resource names (use underscores)
     subnets            = [aws_subnet.public_1.id, aws_subnet.public_2.id]
@@ -17,6 +17,7 @@ resource "aws_lb" "frontend_alb" {
     }
 
     depends_on = [aws_security_group.frontend_alb]
+
 }
 
 resource "aws_lb_target_group" "frontend_tg" {
@@ -25,7 +26,7 @@ resource "aws_lb_target_group" "frontend_tg" {
     protocol    = "HTTP"
 
     # fixed VPC resource name typo
-    vpc_id      = aws_vpc.tier_application.id
+    vpc_id      = aws_vpc.tier_appliction.id
     target_type = "instance"
 
     health_check {
@@ -76,7 +77,7 @@ resource "aws_lb_target_group" "backend_tg" {
     name        = "backend-tg"
     port        = 80
     protocol    = "HTTP"
-    vpc_id      = aws_vpc.tier_application.id
+    vpc_id      = aws_vpc.tier_appliction.id
     target_type = "instance"
 
     health_check {
