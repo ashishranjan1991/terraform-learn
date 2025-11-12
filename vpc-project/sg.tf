@@ -8,12 +8,14 @@ resource "aws_security_group" "bastion_sg" {
         from_port = 22
         to_port = 22
         protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
     }
     egress {
         description = "all"
         from_port = 0
         to_port = 0
         protocol = "-1"
+         cidr_blocks = ["0.0.0.0/0"]
     }
     tags = {
         Name = "bastion-sg"
@@ -29,17 +31,20 @@ resource "aws_security_group" "frontend_alb" {
         from_port = 80
         to_port = 80
         protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
     }
     ingress {
         description = "https"
         from_port = 443
         to_port = 443
         protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
     }
     egress {
         from_port = 0
         to_port = 0
         protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
     }
     tags = {
         Name = "fronted-alb-sg"
@@ -68,6 +73,7 @@ resource "aws_security_group" "web_sg" {
         from_port = 0
         to_port = 0
         protocol = "-1"
+        cidr_blocks= ["0.0.0.0/0"]
     }
     tags = {
         Name = "web-sg"
@@ -90,6 +96,7 @@ resource "aws_security_group" "backend_alb" {
         from_port = 0
         to_port = 0
         protocol = "-1"
+        cidr_blocks= ["0.0.0.0/0"]
     }
     tags = {
         Name = "backend-alb-sg"
@@ -105,7 +112,7 @@ resource "aws_security_group" "app_sg" {
         from_port = 80
         to_port = 80
         protocol = "tcp"
-        security_groups = [aws_security_group.backend_alb.id]
+        security_groups  = [aws_security_group.backend_alb.id]
     }
     ingress {
         description = "sss"
@@ -118,6 +125,7 @@ resource "aws_security_group" "app_sg" {
         from_port = 0
         to_port = 0
         protocol = "-1"
+        cidr_blocks= ["0.0.0.0/0"]
     }
     tags = {
         Name = "app-sg"
@@ -140,6 +148,7 @@ resource "aws_security_group" "db_sg" {
         from_port = 0
         to_port = 0
         protocol = "-1"
+        cidr_blocks= ["0.0.0.0/0"]
     }
     tags = {
         Name = "db-sg"

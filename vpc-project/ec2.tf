@@ -38,12 +38,12 @@ resource "null_resource" "test" {
         inline = [
             "sudo yum update -y",
             "sudo yum install -y mariadb105",
-            "mysql -h ${aws_db_instance.my_db.address} -u ${aws_db_instance.my_db.username} -p'${aws_db_instance.my_db.password}' < /tmp/db.sql"
+            "mysql -h ${aws_db_instance.my_db.address} -u ${aws_db_instance.my_db.username} -ppassword123 < /tmp/db.sql"
         ]
     }
 
-    # triggers = {
-    #     always_run = timestamp()
-    # }
+    triggers = {
+        always_run = timestamp()
+    }
 }
 
